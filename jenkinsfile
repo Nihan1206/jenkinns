@@ -1,0 +1,21 @@
+pipeline {     agent any 
+ 
+    stages { 
+        stage('Build Docker Image') {             steps { 
+                bat 'docker build -t Nihan1206/demobook:v1 .' 
+            } 
+        } 
+ 
+        stage('Push Docker Image') { 
+            steps { 
+                withCredentials([usernamePassword(credentialsId: 'dockerhub_credentials', usernameVariable: 'Nihan12', passwordVariable: 'Nihan@12')]) {                     bat 'docker login -u %USERNAME% -p %PASSWORD%'                     bat 'docker push nehapmca/demobook:v1' 
+                } 
+            } 
+        } 
+ 
+        stage('Run Container') {             steps { 
+                bat 'docker run -d -p 8080:80 Nihan1206/demobook:v1' 
+            } 
+        } 
+    } 
+}
